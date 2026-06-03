@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>CINESTREAM - Search & Discover</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+  <!-- Premium Google Fonts (Bebas Neue, Inter) & Material Design Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  
+  <!-- Local Custom CSS Stylesystem -->
+  <link href="styles.css" rel="stylesheet" />
+  
+  <!-- Global JavaScript Error Boundary Diagnostic -->
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      const errDiv = document.createElement('div');
+      errDiv.style.position = 'fixed';
+      errDiv.style.top = '0';
+      errDiv.style.left = '0';
+      errDiv.style.width = '100%';
+      errDiv.style.backgroundColor = '#dc3545';
+      errDiv.style.color = '#fff';
+      errDiv.style.padding = '20px';
+      errDiv.style.zIndex = '999999';
+      errDiv.style.fontFamily = 'monospace';
+      errDiv.style.fontSize = '14px';
+      errDiv.style.borderBottom = '3px solid #a71d2a';
+      errDiv.innerHTML = '<h4><strong>CINESTREAM Script Diagnostic:</strong></h4>' + 
+                         '<strong>Error:</strong> ' + message + '<br>' +
+                         '<strong>Source:</strong> ' + source + '<br>' +
+                         '<strong>Line:</strong> ' + lineno + ':' + colno + '<br><br>' +
+                         '<small>Please screenshot this screen or copy the error parameters to help us troubleshoot.</small>';
+      document.body.appendChild(errDiv);
+      return false;
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface">
+
+  <!-- Top Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar py-2 px-3">
+    <div class="container-fluid">
+      <!-- Back to Home -->
+      <a class="navbar-brand font-bebas fs-2 text-danger fw-bold tracking-widest d-flex align-items-center gap-2" href="index.html" style="box-shadow: none;">
+        <span class="material-symbols-outlined align-middle fs-3">arrow_back</span>
+        <span>CINESTREAM</span>
+      </a>
+
+      <div class="d-flex align-items-center gap-3 ms-auto">
+        <!-- Watchlist count link -->
+        <a href="index.html#watchlistSection" class="btn btn-link text-white text-decoration-none position-relative p-1">
+          <span class="material-symbols-outlined align-middle" style="font-size: 26px;">bookmarks</span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger watchlist-count" style="font-size: 0.65rem;">0</span>
+        </a>
+
+        <!-- Profile Login Trigger -->
+        <a href="#" class="text-white" id="profileTrigger" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <span class="material-symbols-outlined align-middle" style="font-size: 28px;">account_circle</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Search & Filter Container -->
+  <main class="container py-5 mt-5" style="min-height: 80vh;">
+    
+    <!-- Centered Premium Search Input Box -->
+    <div class="row justify-content-center mt-4 mb-4">
+      <div class="col-md-8 col-lg-6 text-center">
+        <h1 class="font-bebas text-white display-5 mb-3 tracking-wider">SEARCH CATALOG</h1>
+        <div class="position-relative">
+          <input type="text" id="dedicatedSearchField" class="form-control search-input-glass text-white py-3 ps-4 pe-5 fs-5 rounded-pill shadow-sm" placeholder="Search movies, TV shows, cast..." autofocus style="padding-right: 80px !important;" />
+          <!-- Clear button -->
+          <button type="button" id="clearSearchBtn" class="btn btn-link p-0 position-absolute end-0 top-50 translate-middle-y me-5 text-white-50 border-0 d-none d-flex align-items-center justify-content-center" style="box-shadow: none; right: 30px;">
+            <span class="material-symbols-outlined fs-4">close</span>
+          </button>
+          <!-- Search Trigger button -->
+          <button type="button" id="searchTriggerBtn" class="btn btn-link p-0 position-absolute end-0 top-50 translate-middle-y me-3 text-white-50 border-0 d-flex align-items-center justify-content-center" style="box-shadow: none;">
+            <span class="material-symbols-outlined fs-4">search</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Dynamic Category pills -->
+    <div class="d-flex justify-content-center gap-2 mt-4 mb-3 overflow-x-auto hide-scrollbar py-2">
+      <span class="category-tab active" data-category="all">All Content</span>
+      <span class="category-tab" data-category="movie">Movies Only</span>
+      <span class="category-tab" data-category="series">TV Shows Only</span>
+    </div>
+
+    <!-- IMDB/TMDB Real Dynamic Genre Pills -->
+    <div class="container-fluid px-0 mb-5">
+      <h6 class="text-white-50 text-center small mb-3 tracking-wider fw-bold">FILTER BY REAL GENRES</h6>
+      <div class="d-flex flex-wrap justify-content-center gap-2" id="genreContainer">
+        <!-- Dynamic genres loaded directly from TMDB -->
+        <span class="genre-badge border-danger text-danger py-1 px-3 fs-7" style="cursor: pointer;" id="clearGenreBtn">All Genres</span>
+      </div>
+    </div>
+
+    <!-- Dynamic Catalog Results Grid -->
+    <section>
+      <h3 class="font-bebas text-white mb-4 tracking-wider text-center text-md-start" id="resultsCount">CATALOG EXPLORER</h3>
+      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4 justify-content-center" id="searchGridContainer">
+        <!-- Results rendered dynamically by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Footer -->
+  <footer class="py-5 border-top border-white border-opacity-10 bg-black bg-opacity-40">
+    <div class="container py-3">
+      <div class="row gy-4 align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+          <h5 class="font-bebas text-danger fs-3 mb-2">CINESTREAM</h5>
+          <p class="text-white-50 small mb-0 lh-lg" style="max-width: 450px;">
+            Experience world-class cinematic stories, premium originals, and captivating documentations anywhere, anytime. Designed for the ultimate cinematic enjoyment.
+          </p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <div class="d-flex gap-3 justify-content-center justify-content-md-end mb-3">
+            <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">share</span></a>
+            <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">favorite</span></a>
+            <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">public</span></a>
+          </div>
+          <p class="text-white-50 small mb-0">&copy; 2026 CINESTREAM. All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Immersive Movie Details & Player Modal -->
+  <div class="modal fade" id="movieDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-glass border-0">
+        
+        <!-- Modal Head -->
+        <div class="modal-header border-0 pb-0 justify-content-between">
+          <span class="badge bg-danger fs-6 py-2 px-3 fw-bold" id="modalType">MOVIE</span>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <!-- Modal Body content -->
+        <div class="modal-body pt-3">
+          
+          <!-- Immersive simulated player container -->
+          <div class="video-container mb-4">
+            <iframe id="modalVideoPlayer" src="" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+
+          <!-- Video information -->
+          <h2 id="modalMovieTitle" class="font-bebas display-4 text-white fw-bold mb-2">TITLE</h2>
+          
+          <div class="d-flex align-items-center gap-3 mb-3 text-white-50 small flex-wrap">
+            <span class="badge border border-white border-opacity-30 px-2 py-0.5 text-white-50" id="modalAge">PG-13</span>
+            <span id="modalRating" class="text-warning fw-bold">9.0 ★</span>
+            <span id="modalGenres" class="text-white-50 fw-bold"></span>
+            <span id="modalSeriesStats" class="text-white-50 fw-bold d-none"></span>
+            <span>HD / Dolby Atmos</span>
+          </div>
+
+          <!-- Synopsis text -->
+          <p id="modalSynopsis" class="text-white-50 mb-4 lh-lg" style="font-size: 0.95rem;">
+            Loading detailed movie synopsis content...
+          </p>
+
+          <!-- Cast list -->
+          <div class="mb-4">
+            <span class="text-white-50 text-uppercase tracking-wider small d-block mb-2 fw-bold" style="font-size: 0.72rem;">STARRING CAST</span>
+            <div id="modalCast" class="d-flex flex-wrap gap-2">
+              <!-- Dynamic actor badges -->
+            </div>
+          </div>
+
+          <!-- Server Selector (Always visible) -->
+          <div id="modalServerSelectorContainer" class="mb-4 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <h6 class="font-bebas text-white mb-3 tracking-wider" style="font-size: 1.0rem; letter-spacing: 0.1em;">SELECT STREAMING SERVER</h6>
+            <select id="modalServerSelect" class="form-select select-glass w-100">
+              <option value="vidsrc_to">Server 1 (vidsrc.to)</option>
+              <option value="vidsrc_me" selected>Server 2 (vidsrcme.ru - Official VidSrc)</option>
+              <option value="vidsrc_cc">Server 3 (vidsrc.cc)</option>
+              <option value="vidlink">Server 4 (vidlink.pro)</option>
+            </select>
+          </div>
+
+          <!-- Season & Episode selector for TV Shows -->
+          <div id="modalTvSelectorContainer" class="d-none mb-4 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <h6 class="font-bebas text-white mb-3 tracking-wider" style="font-size: 1.0rem; letter-spacing: 0.1em;">SELECT EPISODE</h6>
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-6">
+                <label class="form-label text-white-50 small mb-1" style="font-size: 0.72rem;">Season</label>
+                <select id="modalSeasonSelect" class="form-select select-glass w-100"></select>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label text-white-50 small mb-1" style="font-size: 0.72rem;">Episode</label>
+                <select id="modalEpisodeSelect" class="form-select select-glass w-100"></select>
+              </div>
+            </div>
+            <div id="episodeTitleDisplay" class="text-white-50 small mt-2 px-1 d-none" style="font-size: 0.8rem; font-style: italic; border-left: 2px solid var(--primary); padding-left: 8px;"></div>
+          </div>
+
+          <!-- Interactive controllers -->
+          <div class="d-flex gap-3 flex-wrap">
+            <button id="modalWatchBtn" class="btn btn-primary-stream rounded-pill py-2.5 px-4 d-flex align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">play_circle</span>
+              <span>PLAY NOW</span>
+            </button>
+            <button id="modalPlayBtn" class="btn btn-outline-light rounded-pill py-2.5 px-4 d-none align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">play_arrow</span>
+              <span>WATCH TRAILER</span>
+            </button>
+            <button id="modalWatchlistBtn" class="btn btn-outline-light rounded-pill py-2.5 px-4 d-flex align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">add</span>
+              <span>MY LIST</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium Glassmorphic Auth Modal (Sign In / Register) -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+      <div class="modal-content modal-content-glass border-0 p-4">
+        
+        <!-- Tabs for Switching -->
+        <div class="modal-header border-0 pb-0 justify-content-between flex-column align-items-stretch">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="font-bebas text-white fs-2 mb-0" id="authModalTitle">SIGN IN</h3>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="d-flex border-bottom border-white border-opacity-10 pb-2 mb-3">
+            <button class="btn btn-link text-white text-decoration-none fw-bold flex-fill text-center pb-1 border-bottom border-danger border-2" id="toggleSignInBtn" style="box-shadow: none;">Sign In</button>
+            <button class="btn btn-link text-white-50 text-decoration-none fw-bold flex-fill text-center pb-1" id="toggleSignUpBtn" style="box-shadow: none;">Register</button>
+          </div>
+        </div>
+
+        <div class="modal-body pt-2">
+          <!-- Unified Auth Form -->
+          <form id="authForm">
+            <!-- Username Input (Register Only) -->
+            <div class="mb-3 d-none" id="usernameGroup">
+              <label class="form-label text-white-50 small">Full Name</label>
+              <input type="text" class="form-control search-input-glass text-white" id="authUsername" placeholder="John Doe" />
+            </div>
+
+            <!-- Email Input -->
+            <div class="mb-3">
+              <label class="form-label text-white-50 small">Email Address</label>
+              <input type="email" class="form-control search-input-glass text-white" id="authEmail" required placeholder="name@example.com" />
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-3">
+              <label class="form-label text-white-50 small">Password</label>
+              <input type="password" class="form-control search-input-glass text-white" id="authPassword" required placeholder="••••••••" />
+            </div>
+
+            <!-- Confirm Password Input (Register Only) -->
+            <div class="mb-4 d-none" id="confirmPasswordGroup">
+              <label class="form-label text-white-50 small">Confirm Password</label>
+              <input type="password" class="form-control search-input-glass text-white" id="authConfirmPassword" placeholder="••••••••" />
+            </div>
+
+            <button type="submit" class="btn btn-primary-stream w-100 py-3 rounded-pill fw-bold mb-3" id="authSubmitBtn">Sign In</button>
+            
+            <div class="text-center" id="authFooterText">
+              <span class="text-white-50 small">New to Cinestream? </span>
+              <a href="#" class="text-danger text-decoration-none small fw-bold" id="switchToSignUpLink">Register now</a>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JavaScript Bundle via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Local interactive JavaScript application -->
+  <script src="app.js"></script>
+  
+  <!-- Inline dedicated page scripts to run search -->
+  <script>
+    // Using TMDB configurations and fetch function globally declared in app.js
+
+    // Bind search and listing properties specifically for search.html page
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchGridContainer = document.getElementById('searchGridContainer');
+      const dedicatedSearchField = document.getElementById('dedicatedSearchField');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      const resultsCount = document.getElementById('resultsCount');
+      const genreContainer = document.getElementById('genreContainer');
+      const clearGenreBtn = document.getElementById('clearGenreBtn');
+
+      let selectedGenreId = '';
+      let searchQuery = '';
+      let activeCategory = 'all';
+      const genreIdToNameMap = {};
+
+      // Check for URL query params e.g. search.html?q=interstellar
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryParam = urlParams.get('q');
+      if (queryParam) {
+        dedicatedSearchField.value = queryParam;
+        searchQuery = queryParam.toLowerCase();
+        clearSearchBtn.classList.remove('d-none');
+        
+        // Put cursor at the end
+        dedicatedSearchField.focus();
+        dedicatedSearchField.setSelectionRange(queryParam.length, queryParam.length);
+      }
+
+      // Load Real Genres from TMDB
+      async function loadTMDBGenres() {
+        try {
+          const [movieGenresData, tvGenresData] = await Promise.all([
+            tmdbFetch('/genre/movie/list'),
+            tmdbFetch('/genre/tv/list')
+          ]);
+
+          const allGenres = [...movieGenresData.genres, ...tvGenresData.genres];
+          
+          // Remove duplicates
+          const uniqueGenres = [];
+          const map = new Map();
+          for (const item of allGenres) {
+            genreIdToNameMap[item.id] = item.name.toLowerCase();
+            if(!map.has(item.id)){
+              map.set(item.id, true);
+              uniqueGenres.push(item);
+            }
+          }
+
+          // Render only popular 12 genres to keep it extremely aesthetic
+          const displayGenres = uniqueGenres.slice(0, 14);
+
+          displayGenres.forEach(genre => {
+            const pill = document.createElement('span');
+            pill.className = 'genre-badge py-1 px-3 fs-7';
+            pill.style.cursor = 'pointer';
+            pill.textContent = genre.name;
+            pill.dataset.id = genre.id;
+
+            pill.addEventListener('click', () => {
+              // Highlight selected
+              document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+              pill.classList.add('border-danger', 'text-danger');
+              selectedGenreId = genre.id;
+              renderSearchGrid();
+            });
+
+            genreContainer.appendChild(pill);
+          });
+        } catch (err) {
+          console.error("Error loading genres from TMDB:", err);
+        }
+      }
+
+      // Clear Genre filter
+      if (clearGenreBtn) {
+        clearGenreBtn.addEventListener('click', () => {
+          document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+          clearGenreBtn.classList.add('border-danger', 'text-danger');
+          selectedGenreId = '';
+          renderSearchGrid();
+        });
+      }
+
+      // Live search handler (with debounce for safety)
+      let debounceTimeout;
+      dedicatedSearchField.addEventListener('input', (e) => {
+        const val = e.target.value;
+        searchQuery = val.toLowerCase();
+        
+        if (val) {
+          clearSearchBtn.classList.remove('d-none');
+          // Clear active genre filter on typing to widen search scope
+          selectedGenreId = '';
+          document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+          if (clearGenreBtn) clearGenreBtn.classList.add('border-danger', 'text-danger');
+        } else {
+          clearSearchBtn.classList.add('d-none');
+        }
+
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+          renderSearchGrid();
+        }, 300);
+      });
+
+      // Search Trigger button click triggers search immediately
+      const searchTriggerBtn = document.getElementById('searchTriggerBtn');
+      if (searchTriggerBtn) {
+        searchTriggerBtn.addEventListener('click', () => {
+          searchQuery = dedicatedSearchField.value.trim().toLowerCase();
+          if (searchQuery) {
+            selectedGenreId = '';
+            document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+            if (clearGenreBtn) clearGenreBtn.classList.add('border-danger', 'text-danger');
+          }
+          renderSearchGrid();
+        });
+      }
+
+      // Keypress enter triggers search immediately
+      dedicatedSearchField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          clearTimeout(debounceTimeout);
+          searchQuery = dedicatedSearchField.value.trim().toLowerCase();
+          if (searchQuery) {
+            selectedGenreId = '';
+            document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+            if (clearGenreBtn) clearGenreBtn.classList.add('border-danger', 'text-danger');
+          }
+          renderSearchGrid();
+        }
+      });
+
+      // Clear button
+      clearSearchBtn.addEventListener('click', () => {
+        dedicatedSearchField.value = '';
+        searchQuery = '';
+        selectedGenreId = '';
+        document.querySelectorAll('.genre-badge').forEach(p => p.classList.remove('border-danger', 'text-danger'));
+        if (clearGenreBtn) clearGenreBtn.classList.add('border-danger', 'text-danger');
+        clearSearchBtn.classList.add('d-none');
+        renderSearchGrid();
+        dedicatedSearchField.focus();
+      });
+
+      // Filter tabs in search page
+      const tabs = document.querySelectorAll('.category-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          activeCategory = tab.dataset.category;
+          renderSearchGrid();
+        });
+      });
+
+      // Render search grid function using IMDb for queries & TMDB for recommendations
+      async function renderSearchGrid() {
+        try {
+          // Show sleek loading spinner
+          searchGridContainer.innerHTML = `
+            <div class="col-12 text-center py-5 text-muted">
+              <div class="spinner-border text-danger mb-3" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mb-0 small text-white-50">Searching CINESTREAM Catalog...</p>
+            </div>
+          `;
+
+          let items = [];
+          
+          if (searchQuery) {
+            // Fetch from unofficial IMDb Search API
+            const response = await fetch(`https://imdb.iamidiotareyoutoo.com/search?q=${encodeURIComponent(searchQuery)}`);
+            if (!response.ok) throw new Error(`IMDb API error! status: ${response.status}`);
+            const result = await response.json();
+            const searchData = result.description || result.data || [];
+            
+            items = searchData.map(item => {
+              const title = item["#TITLE"] || item.title || "Untitled";
+              const imdbId = item["#IMDB_ID"] || item.imdbID;
+              const poster = item["#IMG_POSTER"] || item.image || null;
+              const rank = item["#RANK"] || null;
+              
+              // Classify as series/tv if active tab is series
+              const isTv = activeCategory === 'series';
+              
+              return {
+                id: `imdb:${isTv ? 'tv' : 'movie'}:${imdbId}`,
+                imdb_id: imdbId,
+                title: title,
+                name: title,
+                vote_average: rank ? parseFloat((10 - (rank / 10000)).toFixed(1)) : 8.0,
+                poster_path: poster,
+                media_type: isTv ? 'tv' : 'movie',
+                genres: []
+              };
+            });
+
+            // Local category filter
+            if (activeCategory === 'movie') {
+              items = items.filter(item => item.media_type === 'movie');
+            } else if (activeCategory === 'series') {
+              items = items.filter(item => item.media_type === 'tv');
+            }
+          } else {
+            // Default: Discover recommendations with Genres or Trending from TMDB
+            let endpoint = '';
+            if (activeCategory === 'movie') {
+              endpoint = '/discover/movie?sort_by=popularity.desc';
+              if (selectedGenreId) {
+                endpoint += `&with_genres=${selectedGenreId}`;
+              }
+            } else if (activeCategory === 'series') {
+              endpoint = '/discover/tv?sort_by=popularity.desc';
+              if (selectedGenreId) {
+                endpoint += `&with_genres=${selectedGenreId}`;
+              }
+            } else {
+              if (selectedGenreId) {
+                endpoint = `/discover/movie?sort_by=popularity.desc&with_genres=${selectedGenreId}`;
+              } else {
+                endpoint = '/trending/all/day';
+              }
+            }
+            const data = await tmdbFetch(endpoint);
+            items = data.results || [];
+
+            // Apply category filtering for TMDB items
+            if (activeCategory === 'movie') {
+              items = items.filter(item => !item.media_type || item.media_type === 'movie');
+            } else if (activeCategory === 'series') {
+              items = items.filter(item => !item.media_type || item.media_type === 'tv');
+            }
+
+            // Apply genre filtering locally for TMDB items if needed (TMDB discover handles it, but just in case)
+            if (selectedGenreId) {
+              items = items.filter(item => item.genre_ids && item.genre_ids.includes(parseInt(selectedGenreId)));
+            }
+          }
+
+          // Filter out items without poster path
+          items = items.filter(item => item.poster_path);
+
+          // Update count label
+          resultsCount.textContent = searchQuery 
+            ? `FOUND ${items.length} RESULTS FOR "${searchQuery.toUpperCase()}"`
+            : `EXPLORE RECOMMENDATIONS (${items.length})`;
+
+          if (items.length === 0) {
+            searchGridContainer.innerHTML = `
+              <div class="col-12 text-center py-5 text-muted">
+                <span class="material-symbols-outlined fs-1 mb-2">search_off</span>
+                <p class="mb-0 fs-5">No matching cinematic stories found.</p>
+                <small>Try checking another genre filter or check your search query.</small>
+              </div>
+            `;
+          } else {
+            searchGridContainer.innerHTML = items.map(movie => {
+              const title = movie.title || movie.name || "Untitled";
+              const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+              const isTv = movie.media_type === 'tv' || movie.first_air_date ? true : false;
+              const fallbackPosterUrl = movie.poster_path.startsWith('http')
+                ? movie.poster_path 
+                : `${IMAGE_BASE_URL}/w342${movie.poster_path}`;
+              const posterUrl = movie.imdb_id
+                ? getImdbPhotoUrl(movie.imdb_id)
+                : fallbackPosterUrl;
+              
+              return `
+                <div class="col d-flex justify-content-center">
+                  <div class="movie-card" onclick="openMovieDetails('${movie.id}', ${isTv})" style="width: 100%; max-width: 200px;">
+                    <img src="${posterUrl}" alt="${title}" ${movie.imdb_id ? `onerror="this.onerror=null; this.src='${fallbackPosterUrl}'"` : ''}>
+                    <div class="movie-card-overlay">
+                      <h5 class="fw-bold mb-1 text-white text-truncate" style="font-size: 0.95rem;">${title}</h5>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span class="badge bg-danger p-1" style="font-size: 0.65rem;">${rating} ★</span>
+                        <span class="text-white-50" style="font-size: 0.65rem;">${isTv ? 'Series' : 'Movie'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        } catch (err) {
+          console.error("Error fetching search results:", err);
+          searchGridContainer.innerHTML = `
+            <div class="col-12 text-center py-5 text-muted">
+              <span class="material-symbols-outlined fs-1 mb-2 text-danger">error</span>
+              <p class="mb-0 fs-5 text-danger">Connection/API Error</p>
+              <small class="d-block mb-2">${err.message}</small>
+              <small class="text-white-50">Please open the browser developer console (F12) to inspect the network response trace.</small>
+            </div>
+          `;
+        }
+      }
+
+      // Initial run
+      loadTMDBGenres();
+      renderSearchGrid();
+    });
+  </script>
+</body>
+</html>

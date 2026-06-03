@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>CINESTREAM - Stream Premium Stories</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+  <!-- Premium Google Fonts (Bebas Neue, Inter) & Material Design Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  
+  <!-- Local Custom CSS Stylesystem -->
+  <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Top Glassmorphic Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar py-2 px-3">
+    <div class="container-fluid">
+      <!-- Brand Logo -->
+      <a class="navbar-brand font-bebas fs-2 text-danger fw-bold tracking-widest" href="#">
+        CINESTREAM
+      </a>
+      
+      <!-- Right Side Search & Profile Tools -->
+      <div class="d-flex align-items-center gap-3 ms-auto">
+        <!-- Search Trigger icon -->
+        <a href="search.html" class="btn btn-link text-white text-decoration-none p-1 transition-transform active:scale-90" title="Search Catalog">
+          <span class="material-symbols-outlined align-middle" style="font-size: 26px;">search</span>
+        </a>
+
+        <!-- Watchlist Indicator -->
+        <a href="#watchlistSection" class="btn btn-link text-white text-decoration-none position-relative p-1 transition-transform active:scale-90">
+          <span class="material-symbols-outlined align-middle" style="font-size: 26px;">bookmarks</span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger watchlist-count" style="font-size: 0.65rem;">0</span>
+        </a>
+
+        <!-- Profile / Login Trigger -->
+        <a href="#" class="text-white transition-transform active:scale-90" id="profileTrigger" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <span class="material-symbols-outlined align-middle" style="font-size: 28px;">account_circle</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Showcase canvas -->
+  <main class="container-fluid px-0">
+
+    <!-- Hero banner showcase -->
+    <section class="hero-wrapper">
+      <img id="heroBgImage" class="hero-bg" src="" alt="Showcase background" />
+      <div class="hero-overlay"></div>
+      
+      <!-- Hero information block -->
+      <div class="hero-content">
+        <p id="heroTagline" class="font-bebas text-danger mb-1 tracking-widest fs-5">NOW TRENDING</p>
+        <h1 id="heroTitle" class="font-bebas display-2 text-white fw-bold mb-3">LOADING...</h1>
+        
+        <div id="heroMeta" class="d-flex gap-2 justify-content-center align-items-center mb-4">
+          <!-- Meta loaded dynamically -->
+        </div>
+        
+        <div class="d-flex justify-content-center gap-3">
+          <button id="heroPlayBtn" class="btn btn-primary-stream py-3 px-5 rounded-pill d-flex align-items-center gap-2">
+            <span class="material-symbols-outlined fill-1">play_arrow</span>
+            <span class="fw-bold">Watch Trailer</span>
+          </button>
+          <button id="heroListBtn" class="btn btn-watchlist-toggle rounded-circle p-3 d-flex align-items-center justify-content-center">
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Genre and Categories filters -->
+    <div class="container-fluid px-4 my-4">
+      <div class="d-flex align-items-center gap-2 overflow-x-auto hide-scrollbar py-2">
+        <span class="category-tab active" data-category="all">All Items</span>
+        <span class="category-tab" data-category="movie">Movies</span>
+        <span class="category-tab" data-category="series">Series</span>
+      </div>
+    </div>
+
+    <!-- Rows container -->
+    <div class="container-fluid px-4">
+      
+      <!-- My Watchlist row (Dynamically hidden when empty) -->
+      <section id="watchlistSection" class="mb-5 d-none">
+        <h4 class="font-bebas text-white mb-3 tracking-wider">MY WATCHLIST</h4>
+        <div id="watchlistContainer" class="media-row-container hide-scrollbar">
+          <!-- Watchlisted cards go here -->
+        </div>
+      </section>
+
+
+      <!-- Dynamic Scroll Rows Container -->
+      <div id="dynamicRowsContainer">
+        <!-- Netflix/Prime-style categories will load here dynamically -->
+      </div>
+      
+    </div>
+
+    <!-- Premium Cinematic Footer -->
+    <!-- Premium Cinematic Footer -->
+    <footer class="py-5 mt-5 border-top border-white border-opacity-10 bg-black bg-opacity-40">
+      <div class="container py-3">
+        <div class="row gy-4 align-items-center">
+          <div class="col-md-6 text-center text-md-start">
+            <h5 class="font-bebas text-danger fs-3 mb-2">CINESTREAM</h5>
+            <p class="text-white-50 small mb-0 lh-lg" style="max-width: 450px;">
+              Experience world-class cinematic stories, premium originals, and captivating documentations anywhere, anytime. Designed for the ultimate cinematic enjoyment.
+            </p>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <div class="d-flex gap-3 justify-content-center justify-content-md-end mb-3">
+              <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">share</span></a>
+              <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">favorite</span></a>
+              <a href="#" class="btn btn-outline-light btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><span class="material-symbols-outlined fs-5">public</span></a>
+            </div>
+            <p class="text-white-50 small mb-0">&copy; 2026 CINESTREAM. All Rights Reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Bottom Navigation Shell (for responsive layouts) -->
+  <nav class="fixed-bottom d-flex d-lg-none justify-content-around py-3 bottom-nav-glass">
+    <a class="bottom-nav-link active" href="#">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a class="bottom-nav-link" href="search.html">
+      <span class="material-symbols-outlined">explore</span>
+      <span>Discover</span>
+    </a>
+    <a class="bottom-nav-link" href="#watchlistSection">
+      <span class="material-symbols-outlined">bookmarks</span>
+      <span>My List</span>
+    </a>
+    <a class="bottom-nav-link" href="#" onclick="alert('Profile configurations available soon!')">
+      <span class="material-symbols-outlined">person</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Immersive Movie Details & Player Modal -->
+  <div class="modal fade" id="movieDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content modal-content-glass border-0">
+        
+        <!-- Modal Head -->
+        <div class="modal-header border-0 pb-0 justify-content-between">
+          <span class="badge bg-danger fs-6 py-2 px-3 fw-bold" id="modalType">MOVIE</span>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <!-- Modal Body content -->
+        <div class="modal-body pt-3">
+          
+          <!-- Immersive simulated player container -->
+          <div class="video-container mb-4">
+            <iframe id="modalVideoPlayer" src="" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+
+          <!-- Video information -->
+          <h2 id="modalMovieTitle" class="font-bebas display-4 text-white fw-bold mb-2">TITLE</h2>
+          
+          <div class="d-flex align-items-center gap-3 mb-3 text-white-50 small flex-wrap">
+            <span class="badge border border-white border-opacity-30 px-2 py-0.5 text-white-50" id="modalAge">PG-13</span>
+            <span id="modalRating" class="text-warning fw-bold">9.0 ★</span>
+            <span id="modalGenres" class="text-white-50 fw-bold"></span>
+            <span id="modalSeriesStats" class="text-white-50 fw-bold d-none"></span>
+            <span>HD / Dolby Atmos</span>
+          </div>
+
+          <!-- Synopsis text -->
+          <p id="modalSynopsis" class="text-white-50 mb-4 lh-lg" style="font-size: 0.95rem;">
+            Loading detailed movie synopsis content...
+          </p>
+
+          <!-- Cast list -->
+          <div class="mb-4">
+            <span class="text-white-50 text-uppercase tracking-wider small d-block mb-2 fw-bold" style="font-size: 0.72rem;">STARRING CAST</span>
+            <div id="modalCast" class="d-flex flex-wrap gap-2">
+              <!-- Dynamic actor badges -->
+            </div>
+          </div>
+
+          <!-- Server Selector (Always visible) -->
+          <div id="modalServerSelectorContainer" class="mb-4 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <h6 class="font-bebas text-white mb-3 tracking-wider" style="font-size: 1.0rem; letter-spacing: 0.1em;">SELECT STREAMING SERVER</h6>
+            <select id="modalServerSelect" class="form-select select-glass w-100">
+              <option value="vidsrc_to">Server 1 (vidsrc.to)</option>
+              <option value="vidsrc_me" selected>Server 2 (vidsrcme.ru - Official VidSrc)</option>
+              <option value="vidsrc_cc">Server 3 (vidsrc.cc)</option>
+              <option value="vidlink">Server 4 (vidlink.pro)</option>
+            </select>
+          </div>
+
+          <!-- Season & Episode selector for TV Shows -->
+          <div id="modalTvSelectorContainer" class="d-none mb-4 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <h6 class="font-bebas text-white mb-3 tracking-wider" style="font-size: 1.0rem; letter-spacing: 0.1em;">SELECT EPISODE</h6>
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-6">
+                <label class="form-label text-white-50 small mb-1" style="font-size: 0.72rem;">Season</label>
+                <select id="modalSeasonSelect" class="form-select select-glass w-100"></select>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label text-white-50 small mb-1" style="font-size: 0.72rem;">Episode</label>
+                <select id="modalEpisodeSelect" class="form-select select-glass w-100"></select>
+              </div>
+            </div>
+            <div id="episodeTitleDisplay" class="text-white-50 small mt-2 px-1 d-none" style="font-size: 0.8rem; font-style: italic; border-left: 2px solid var(--primary); padding-left: 8px;"></div>
+          </div>
+
+          <!-- Interactive controllers -->
+          <div class="d-flex gap-3 flex-wrap">
+            <button id="modalWatchBtn" class="btn btn-primary-stream rounded-pill py-2.5 px-4 d-flex align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">play_circle</span>
+              <span>PLAY NOW</span>
+            </button>
+            <button id="modalPlayBtn" class="btn btn-outline-light rounded-pill py-2.5 px-4 d-none align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">play_arrow</span>
+              <span>WATCH TRAILER</span>
+            </button>
+            <button id="modalWatchlistBtn" class="btn btn-outline-light rounded-pill py-2.5 px-4 d-flex align-items-center gap-2 font-monospace fw-bold" style="font-size: 0.85rem; letter-spacing: 0.05em;">
+              <span class="material-symbols-outlined align-middle fs-5">add</span>
+              <span>MY LIST</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium Glassmorphic Auth Modal (Sign In / Register) -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+      <div class="modal-content modal-content-glass border-0 p-4">
+        
+        <!-- Tabs for Switching -->
+        <div class="modal-header border-0 pb-0 justify-content-between flex-column align-items-stretch">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="font-bebas text-white fs-2 mb-0" id="authModalTitle">SIGN IN</h3>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="d-flex border-bottom border-white border-opacity-10 pb-2 mb-3">
+            <button class="btn btn-link text-white text-decoration-none fw-bold flex-fill text-center pb-1 border-bottom border-danger border-2" id="toggleSignInBtn" style="box-shadow: none;">Sign In</button>
+            <button class="btn btn-link text-white-50 text-decoration-none fw-bold flex-fill text-center pb-1" id="toggleSignUpBtn" style="box-shadow: none;">Register</button>
+          </div>
+        </div>
+
+        <div class="modal-body pt-2">
+          <!-- Unified Auth Form -->
+          <form id="authForm">
+            <!-- Username Input (Register Only) -->
+            <div class="mb-3 d-none" id="usernameGroup">
+              <label class="form-label text-white-50 small">Full Name</label>
+              <input type="text" class="form-control search-input-glass text-white" id="authUsername" placeholder="John Doe" />
+            </div>
+
+            <!-- Email Input -->
+            <div class="mb-3">
+              <label class="form-label text-white-50 small">Email Address</label>
+              <input type="email" class="form-control search-input-glass text-white" id="authEmail" required placeholder="name@example.com" />
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-3">
+              <label class="form-label text-white-50 small">Password</label>
+              <input type="password" class="form-control search-input-glass text-white" id="authPassword" required placeholder="••••••••" />
+            </div>
+
+            <!-- Confirm Password Input (Register Only) -->
+            <div class="mb-4 d-none" id="confirmPasswordGroup">
+              <label class="form-label text-white-50 small">Confirm Password</label>
+              <input type="password" class="form-control search-input-glass text-white" id="authConfirmPassword" placeholder="••••••••" />
+            </div>
+
+            <button type="submit" class="btn btn-primary-stream w-100 py-3 rounded-pill fw-bold mb-3" id="authSubmitBtn">Sign In</button>
+            
+            <div class="text-center" id="authFooterText">
+              <span class="text-white-50 small">New to Cinestream? </span>
+              <a href="#" class="text-danger text-decoration-none small fw-bold" id="switchToSignUpLink">Register now</a>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JavaScript Bundle via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Local interactive JavaScript application -->
+  <script src="app.js"></script>
+</body>
+</html>
